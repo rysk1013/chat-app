@@ -1,4 +1,5 @@
 <div class="chat">
+
   <div class="chat-header">
     <div class="left-header">
       <div class="header-title">
@@ -46,15 +47,14 @@
       </div>
     </div>
   </div>
-  
-  <div class="form">
-    <div class="form-input">
-      <input class="form-message" type="text" placeholder="type a message">
-      <label class="form-image">
-        <span class="image-file">画像</span>
-        <input type="file" class="hidden">
-      </label>
-    </div>
-    <input class="form-submit" type="submit" value="送信">
-  </div>
+
+  <%= form_with model: [@room, @message], class: "form", local: true do |f| %>
+    <%= f.text_field :content, class: "form-message", placeholder: "type a message" %>
+    <label class="form-image">
+      <span class="image-file">画像</span>
+      <%= f.file_field :image, class: "hidden" %>
+    </label>
+    <%= f.submit "送信", class: "form-submit" %>
+  <% end %>
+
 </div>
