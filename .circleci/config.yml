@@ -43,4 +43,4 @@ jobs:
       - run: mv config/database.yml.ci config/database.yml 
 
       - run: bundle exec rails db:create
-      - run: bundle exec rails db:migrate:load    
+      - run: bundle exec rails db:schema:load    
