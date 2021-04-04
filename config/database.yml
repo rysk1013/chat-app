@@ -16,7 +16,7 @@ default: &default
   username: root
   password: password
   socket: /tmp/mysql.sock
-  host: chat_app_test
+  host: db
 
 development:
   <<: *default
