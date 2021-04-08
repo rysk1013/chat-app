@@ -15,9 +15,9 @@ RSpec.describe 'チャットルームの削除機能', type: :system do
     # メッセージ情報を5つDBに追加する
     FactoryBot.create_list(:message, 5, room_id: @room_user.room.id, user_id: @room_user.user.id)
     # 「チャットを終了する」ボタンをクリックすることで、作成した5つのメッセージが削除されていることを確認する
-    expect do
-      find_link('チャットを終了する', href: room_path(@room_user.room)).click
-    end.to change { @room_user.room.messages.count }.by(-5)
+    expect {
+      find_link('チャットを終了する',  href: room_path(@room_user.room)).click
+    }.to change { @room_user.room.messages.count }.by(-5)
     # トップページに遷移していることを確認する
     expect(current_path).to eq root_path
   end
