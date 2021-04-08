@@ -14,9 +14,10 @@ RSpec.describe 'メッセージ投稿機能', type: :system do
       click_on(@room_user.room.name)
 
       # DBに保存されていないことを確認する
-      expect do
-        find('input[name="commit"]')
-      end.not_to change { Message.count }
+      expect {
+        find('input[name="commit"]').click
+      }.not_to change { Message.count }
+      
       # 元のページに戻ってくることを確認する
       expect(current_path).to eq room_messages_path(@room_user.room)
     end
@@ -33,10 +34,12 @@ RSpec.describe 'メッセージ投稿機能', type: :system do
       # 値をテキストフォームに入力する
       post = 'aaa'
       fill_in 'message_content', with: post
+
       # 送信した値がDBに保存されていることを確認する
-      expect  do
+      expect {
         find('input[name="commit"]').click
-      end.to change { Message.count }.by(1)
+      }.to change { Message.count }.by(1)
+      
       # 投稿一覧画面に遷移していることを確認する
       expect(current_path).to eq room_messages_path(@room_user.room)
       # 送信した値がブラウザに表示されていることを確認する
