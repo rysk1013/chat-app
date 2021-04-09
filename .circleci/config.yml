@@ -39,16 +39,15 @@ jobs:
           paths:
             - ./vendor/bundle
           key: v1-dependencies-{{ checksum "Gemfile.lock" }}
-
+          
       - run: mv config/database.yml.ci config/database.yml 
-
       - run: bundle exec rails db:create
       - run: bundle exec rails db:schema:load
       - run:
           name: yarnインストール
           command: yarn install
       - run: bundle exec bin/webpack
-      
+
       # run rubocop
       - run:
           name: Rubocop
@@ -58,7 +57,7 @@ jobs:
       - run:
           name: run tests
           command: |
-            rm -rf bin/webpack*
+            rm -rf config/webpacker.yml
             gem install rails
             rails webpacker:install
             RAILS_ENV=test bundle exec rails webpacker:compile
