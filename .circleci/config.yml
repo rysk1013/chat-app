@@ -39,13 +39,41 @@ jobs:
           paths:
             - ./vendor/bundle
           key: v1-dependencies-{{ checksum "Gemfile.lock" }}
-
+          
       - run: mv config/database.yml.ci config/database.yml 
-
       - run: bundle exec rails db:create
-      - run: bundle exec rails db:schema:load  
+      - run: bundle exec rails db:schema:load
+      - run:
+          name: yarnインストール
+          command: yarn install
+      - run: bundle exec bin/webpack
 
       # run rubocop
       - run:
           name: Rubocop
           command: bundle exec rubocop
+
+      # Rspec
+      - run:
+          name: run tests
+          command: |
+            rm -rf config/webpacker.yml
+            gem install rails
+            rails webpacker:install
+            RAILS_ENV=test bundle exec rails webpacker:compile
+            mkdir /tmp/test-results
+            TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | \
+              circleci tests split --split-by=timings)"
+
+            bundle exec rspec \
+              --format progress \
+              --format RspecJunitFormatter \
+              --out //tmp/test-results/rspec.xml \
+              --format progress \
+              $TEST_FILES
+
+      - store_test_results:
+          path: /tmp/test-results
+      - store_artifacts:
+          path: /tmp/test-results
+          destination: test-results
