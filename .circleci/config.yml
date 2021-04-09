@@ -43,8 +43,12 @@ jobs:
       - run: mv config/database.yml.ci config/database.yml 
 
       - run: bundle exec rails db:create
-      - run: bundle exec rails db:schema:load  
-
+      - run: bundle exec rails db:schema:load
+      - run:
+          name: yarnインストール
+          command: yarn install
+      - run: bundle exec bin/webpack
+      
       # run rubocop
       - run:
           name: Rubocop
